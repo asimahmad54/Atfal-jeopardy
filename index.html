@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atfal Jeopardy - December 2025</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #FFD700;
+            --dark-blue: #0a1628;
+            --deep-blue: #1a2942;
+            --accent-green: #00ff88;
+            --text-light: #e8f4f8;
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: linear-gradient(135deg, var(--dark-blue) 0%, #000814 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(0, 255, 136, 0.05));
+            border: 3px solid var(--gold);
+            border-radius: 15px;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
+            animation: headerGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes headerGlow {
+            0%, 100% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.3); }
+            50% { box-shadow: 0 0 60px rgba(255, 215, 0, 0.5); }
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 4.5rem;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8),
+                         0 0 40px rgba(255, 215, 0, 0.4);
+            letter-spacing: 8px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--accent-green);
+            letter-spacing: 3px;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(26, 41, 66, 0.6);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .score {
+            text-align: center;
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            color: var(--accent-green);
+            margin-bottom: 5px;
+        }
+
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .category {
+            background: linear-gradient(135deg, var(--deep-blue), var(--dark-blue));
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.3rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .question-card {
+            background: linear-gradient(135deg, #1e3a5f, #0f2744);
+            padding: 30px;
+            text-align: center;
+            border: 3px solid var(--accent-green);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: var(--gold);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+
+        .question-card:hover::before {
+            left: 100%;
+        }
+
+        .question-card:hover {
+            transform: scale(1.05);
+            border-color: var(--gold);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.6);
+        }
+
+        .question-card.answered {
+            background: rgba(10, 22, 40, 0.3);
+            border-color: rgba(255, 215, 0, 0.3);
+            cursor: not-allowed;
+            color: rgba(255, 215, 0, 0.3);
+        }
+
+        .question-card.answered:hover {
+            transform: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 900px;
+            margin: 5% auto;
+            background: linear-gradient(135deg, var(--deep-blue), var(--dark-blue));
+            padding: 50px;
+            border-radius: 15px;
+            border: 4px solid var(--gold);
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.5);
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 3rem;
+            color: var(--gold);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close:hover {
+            color: var(--accent-green);
+            transform: rotate(90deg);
+        }
+
+        .question-text {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            color: var(--text-light);
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .option {
+            padding: 25px;
+            background: rgba(26, 41, 66, 0.6);
+            border: 2px solid var(--accent-green);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            text-align: left;
+        }
+
+        .option:hover {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: var(--gold);
+            transform: translateX(10px);
+        }
+
+        .option.correct {
+            background: rgba(0, 255, 136, 0.3);
+            border-color: var(--accent-green);
+            animation: correct 0.5s ease;
+        }
+
+        .option.incorrect {
+            background: rgba(255, 0, 0, 0.3);
+            border-color: #ff0000;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes correct {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .result {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result.correct-result {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+        }
+
+        .result.incorrect-result {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff6b6b;
+        }
+
+        .reset-btn {
+            display: block;
+            margin: 30px auto 0;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, var(--gold), #ffa500);
+            border: none;
+            border-radius: 8px;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.5rem;
+            color: var(--dark-blue);
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 2px;
+        }
+
+        .reset-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .board {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+
+            .question-card {
+                font-size: 1.8rem;
+                padding: 20px;
+            }
+
+            .modal-content {
+                padding: 30px;
+                margin: 10% 10px;
+            }
+
+            .question-text {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Team Setup Styles */
+        .setup-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--deep-blue), var(--dark-blue));
+            padding: 50px;
+            border-radius: 15px;
+            border: 3px solid var(--gold);
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.5);
+        }
+
+        .setup-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 3rem;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: 3px;
+        }
+
+        .team-setup {
+            margin-bottom: 30px;
+        }
+
+        .setup-label {
+            display: block;
+            font-size: 1.2rem;
+            color: var(--accent-green);
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .team-selector {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .team-btn {
+            padding: 15px 30px;
+            background: rgba(26, 41, 66, 0.6);
+            border: 2px solid var(--accent-green);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-family: 'Space Mono', monospace;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .team-btn:hover {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        .team-btn.active {
+            background: rgba(0, 255, 136, 0.3);
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .team-input-group {
+            margin-bottom: 20px;
+        }
+
+        .team-input-group label {
+            display: block;
+            color: var(--accent-green);
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .team-input-group input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(26, 41, 66, 0.6);
+            border: 2px solid var(--accent-green);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-family: 'Space Mono', monospace;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .team-input-group input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--gold), #ffa500);
+            border: none;
+            border-radius: 8px;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.8rem;
+            color: var(--dark-blue);
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 3px;
+            margin-top: 30px;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+        }
+
+        .team-score {
+            text-align: center;
+            padding: 20px;
+            background: rgba(26, 41, 66, 0.6);
+            border-radius: 10px;
+            border: 2px solid var(--accent-green);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .team-score:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .team-score.active {
+            border-color: var(--gold);
+            background: rgba(255, 215, 0, 0.1);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .team-name {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .team-points {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--accent-green);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        .team-selector-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .team-selector-content {
+            background: linear-gradient(135deg, var(--deep-blue), var(--dark-blue));
+            padding: 50px;
+            border-radius: 15px;
+            border: 4px solid var(--gold);
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.5);
+            text-align: center;
+        }
+
+        .team-selector-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 30px;
+            letter-spacing: 3px;
+        }
+
+        .team-selection-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .team-select-btn {
+            padding: 20px 40px;
+            background: rgba(26, 41, 66, 0.6);
+            border: 2px solid var(--accent-green);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-family: 'Space Mono', monospace;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .team-select-btn:hover {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: var(--gold);
+            transform: scale(1.05);
+        }
+
+        #gameId {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(26, 41, 66, 0.8);
+            border: 2px solid var(--accent-green);
+            border-radius: 8px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--accent-green);
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: var(--accent-green);
+            border: none;
+            border-radius: 5px;
+            color: var(--dark-blue);
+            font-family: 'Space Mono', monospace;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+
+        /* Mode Selection Styles */
+        .mode-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .mode-btn {
+            padding: 40px 30px;
+            background: linear-gradient(135deg, rgba(26, 41, 66, 0.8), rgba(10, 22, 40, 0.8));
+            border: 3px solid var(--accent-green);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.4);
+            background: linear-gradient(135deg, rgba(26, 41, 66, 1), rgba(10, 22, 40, 1));
+        }
+
+        .mode-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .mode-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .mode-desc {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            color: var(--text-light);
+            opacity: 0.8;
+        }
+
+        .back-btn {
+            width: 100%;
+            padding: 15px;
+            background: rgba(26, 41, 66, 0.6);
+            border: 2px solid var(--accent-green);
+            border-radius: 8px;
+            font-family: 'Space Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+
+        .back-btn:hover {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: var(--gold);
+        }
+
+        @media (max-width: 768px) {
+            .mode-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <header>
+            <h1>ATFAL JEOPARDY</h1>
+            <div class="subtitle">December 2025 Study Guide</div>
+        </header>
+
+        <!-- Mode Selection Screen -->
+        <div id="modeScreen">
+            <div class="setup-container">
+                <h2 class="setup-title">Choose Game Mode</h2>
+                <p style="text-align: center; color: var(--text-light); margin-bottom: 30px; font-size: 1.1rem;">
+                    Select how you want to play
+                </p>
+                
+                <div class="mode-buttons">
+                    <button class="mode-btn" onclick="selectMode('practice')">
+                        <div class="mode-icon">📚</div>
+                        <div class="mode-title">Individual Practice</div>
+                        <div class="mode-desc">Review questions at your own pace</div>
+                    </button>
+                    
+                    <button class="mode-btn" onclick="selectMode('team')">
+                        <div class="mode-icon">🏆</div>
+                        <div class="mode-title">Team Competition</div>
+                        <div class="mode-desc">Play with 1-3 teams in class</div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Setup Screen -->
+        <div id="setupScreen" style="display: none;">
+            <div class="setup-container">
+                <h2 class="setup-title">Team Setup</h2>
+                
+                <div class="team-setup">
+                    <label class="setup-label">Number of Teams:</label>
+                    <div class="team-selector">
+                        <button class="team-btn active" onclick="selectTeamCount(1)">1 Team</button>
+                        <button class="team-btn" onclick="selectTeamCount(2)">2 Teams</button>
+                        <button class="team-btn" onclick="selectTeamCount(3)">3 Teams</button>
+                    </div>
+                </div>
+
+                <div id="teamNames">
+                    <div class="team-input-group">
+                        <label>Team 1 Name:</label>
+                        <input type="text" id="team1Name" placeholder="Enter team name" value="Team 1">
+                    </div>
+                </div>
+
+                <button class="start-btn" onclick="startGame()">Start Game</button>
+                <button class="back-btn" onclick="backToMode()">Back</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" style="display: none;">
+            <div class="score-board" id="scoreBoard"></div>
+            <div class="board" id="board"></div>
+            <button class="reset-btn" onclick="showResetConfirm()">Reset Game</button>
+        </div>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="question-text" id="questionText"></div>
+            <div class="options" id="options"></div>
+            <div class="result" id="result"></div>
+        </div>
+    </div>
+
+    <div class="team-selector-modal" id="teamSelectorModal">
+        <div class="team-selector-content">
+            <div class="team-selector-title">Select Team to Answer</div>
+            <div class="team-selection-btns" id="teamSelectionBtns"></div>
+        </div>
+    </div>
+
+    <script>
+        // Create stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        const questions = [
+            // Ages 7-10 (100 points each)
+            { category: "Prophet Ibrahim", points: 100, question: "What did the people of Prophet Ibrahim's (as) land worship?", options: ["Idols, stars, the moon, and the sun", "Animals", "Houses", "Angels"], answer: 0 },
+            { category: "Prophet Ibrahim", points: 100, question: "Even as a child, what did Ibrahim (as) feel in his heart?", options: ["Many gods must exist", "Idols bring good luck", "There is only one true God", "Everyone should follow their parents blindly"], answer: 2 },
+            { category: "Prophet Ibrahim", points: 100, question: "How did Ibrahim (as) show people that stars, the moon, and the sun were not gods?", options: ["He ignored them", "He worshipped them", "He hid them", "He showed they disappear"], answer: 3 },
+            { category: "Prophet Ibrahim", points: 100, question: "What did Ibrahim (as) do to the idols to teach people a lesson?", options: ["Painted them", "Broke all of them except the biggest one", "Hid them in a cave", "Gave them away"], answer: 1 },
+            { category: "Prophet Ibrahim", points: 100, question: "What miracle happened when Ibrahim (as) was thrown into the fire?", options: ["The fire disappeared", "Birds saved him", "The fire became cool and safe", "It started raining candy"], answer: 2 },
+            
+            { category: "Prophet Noah", points: 100, question: "What message did Noah (as) give to his people?", options: ["Worship idols", "Worship Allah alone", "Build a tower", "Leave the town"], answer: 1 },
+            { category: "Prophet Noah", points: 100, question: "Who mostly believed in Noah (as)?", options: ["Rich leaders", "Only his family", "No one at all", "A small group of poor people and youth"], answer: 3 },
+            { category: "Prophet Noah", points: 100, question: "What big thing did Allah command Noah (as) to build?", options: ["A boat (Ark)", "A palace", "A school", "A tower"], answer: 0 },
+            { category: "Prophet Noah", points: 100, question: "What did the people do when Noah (as) built the Ark?", options: ["They helped him", "They made fun of him", "They joined him immediately", "They destroyed it"], answer: 1 },
+            { category: "Prophet Noah", points: 100, question: "What happened after the Ark was built?", options: ["A huge flood came", "People celebrated", "The Ark disappeared", "Noah (as) forgot about the boat"], answer: 0 },
+
+            { category: "Prophet Adam", points: 100, question: "Who was Prophet Adam (as)?", options: ["The first human ever", "The first prophet of humanity", "A king of Egypt", "A carpenter"], answer: 1 },
+            { category: "Prophet Adam", points: 100, question: "What special gift did Allah teach Adam (as)?", options: ["Building houses", "Names of things", "Farming", "Cooking"], answer: 1 },
+            { category: "Prophet Adam", points: 100, question: "Who refused to respect Adam (as)?", options: ["All angels", "Animals", "Iblis", "Birds"], answer: 2 },
+            { category: "Prophet Adam", points: 100, question: "What did Prophet Adam (as) build under Allah's command?", options: ["The Ka'bah", "A city", "A ship", "A school"], answer: 0 },
+            { category: "Prophet Adam", points: 100, question: "When Adam (as) made a mistake and repented, what did Allah do?", options: ["Punished him forever", "Forgave him and continued to guide him", "Allowed him to continue living in the garden", "Ignored him"], answer: 1 },
+
+            { category: "Prophet Musa", points: 100, question: "Why was baby Musa (as) put in a basket in the river?", options: ["For fun", "To catch fish", "To travel to another city", "To escape Pharaoh's cruel order"], answer: 3 },
+            { category: "Prophet Musa", points: 100, question: "Who found baby Musa (as)?", options: ["Pharaoh's wife", "Pharaoh", "A fisherman", "His sister"], answer: 0 },
+            { category: "Prophet Musa", points: 100, question: "What mistake did young Musa (as) make in Egypt?", options: ["He broke an idol", "He stole food", "He accidentally killed an Egyptian", "He burned a house"], answer: 2 },
+            { category: "Prophet Musa", points: 100, question: "Who invited Musa (as) to stay in Midian?", options: ["A king", "A soldier", "A man named Shuaib", "Hazrat Nuh (as)"], answer: 2 },
+            { category: "Prophet Musa", points: 100, question: "What miracles did Allah show Musa (as)?", options: ["Walking on water", "His staff became a snake and his hand shone with light", "Turning stones into food", "Becoming invisible"], answer: 1 },
+            { category: "Prophet Musa", points: 100, question: "What happened when Musa (as) struck the sea with his staff?", options: ["A boat appeared", "The water turned sweet", "The sea split into two paths", "The fish spoke"], answer: 2 },
+            { category: "Prophet Musa", points: 100, question: "Why did Pharaoh keep getting punished by Allah?", options: ["He listened too much", "He kept breaking his promises", "He moved to another land", "He had no magicians"], answer: 1 },
+            { category: "Prophet Musa", points: 100, question: "What were Israelites told to build to stay united and support each other?", options: ["Homes close together", "Tents far apart", "Palaces", "Farms"], answer: 0 },
+            { category: "Prophet Musa", points: 100, question: "What did some Israelites do while Musa (as) was on Mount Tur?", options: ["Built a mosque", "Went on a journey", "Fell into idol worship", "Learned the Holy Qur'an"], answer: 2 },
+            { category: "Prophet Musa", points: 100, question: "Why did the Israelites wander for 40 years?", options: ["They got lost", "They were lazy", "They wanted to explore the desert", "They were afraid to fight and disobeyed Allah"], answer: 3 },
+
+            { category: "Hayya Alal Falah", points: 100, question: "What is real success according to Islam?", options: ["Pleasing Allah and doing good", "Getting good grades", "Having fun", "Owning many toys"], answer: 0 },
+            { category: "Hayya Alal Falah", points: 100, question: "What does 'Hayya Alal Falah' mean?", options: ["Come to prayer", "Come to success", "Come to work", "Come to sleep"], answer: 1 },
+            { category: "Hayya Alal Falah", points: 100, question: "Which action helps us succeed at home?", options: ["Ignoring parents", "Being rude to others", "Being kind to parents", "Talking loudly all the time"], answer: 2 },
+            { category: "Hayya Alal Falah", points: 100, question: "What did the Promised Messiah (as) say changed people from being like 'wild animals'?", options: ["Eating healthy food", "The teachings of the Holy Qur'an", "Reading many books", "Traveling far"], answer: 1 },
+            { category: "Hayya Alal Falah", points: 100, question: "What does patience bring, according to the Holy Prophet (saw)?", options: ["More problems", "Nothing", "Laziness", "Victory and relief"], answer: 3 },
+
+            // Ages 11-15 (200 points each)
+            { category: "Hazrat Ibrahim", points: 200, question: "What made Hazrat Ibrahim (as) stand out in a society full of idol worship?", options: ["He stayed quiet to avoid conflict", "He followed his ancestors' practices", "He challenged false beliefs openly", "He worshipped the sun"], answer: 2 },
+            { category: "Hazrat Ibrahim", points: 200, question: "When Hazrat Ibrahim (as) asked his people, 'What are these images to which you are devoted?', what mindset did he challenge?", options: ["Modern science", "Blindly following traditions", "Respecting elders", "Natural curiosity"], answer: 1 },
+            { category: "Hazrat Ibrahim", points: 200, question: "Ibrahim (as) debated the king who claimed to control life and death. What argument defeated the king?", options: ["Allah causes the sun to rise from the east—bring it from the west.", "Allah controls rain—make it stop.", "Allah gives wealth—take mine.", "Allah made the moon—break it."], answer: 0 },
+            { category: "Hazrat Ibrahim", points: 200, question: "What lesson does Hazrat Ibrahim's (as) courage teach modern Muslims?", options: ["Always argue loudly", "Youth should avoid debating adults", "Beliefs should never be questioned", "Truth should be followed even when unpopular"], answer: 3 },
+            { category: "Hazrat Ibrahim", points: 200, question: "Which of the following BEST describes Hazrat Ibrahim (as) as a reformer?", options: ["He replaced one idol with another", "He revived forgotten teachings of Tauheed", "He avoided talking about religion", "He followed whatever others believed"], answer: 1 },
+
+            { category: "Dhikr", points: 200, question: "According to the Holy Qur'an, what makes Dhikr 'the greatest virtue'?", options: ["It is easy to do", "It impresses other people", "It brings Allah's presence into every moment", "It requires special rituals"], answer: 2 },
+            { category: "Dhikr", points: 200, question: "Which of the following is NOT a form of true Dhikr?", options: ["Remembering Allah in your thoughts", "Acting righteously even when alone", "Repeating Allah's names sincerely", "Using music and dancing to 'feel spiritual'"], answer: 3 },
+            { category: "Dhikr", points: 200, question: "Which type of Dhikr involves reflecting on Allah's favors, nature, and creation?", options: ["Verbal Dhikr", "Reflective Dhikr", "Loud Dhikr", "Ritual Dhikr"], answer: 1 },
+            { category: "Dhikr", points: 200, question: "Many people mistake emotional highs for spiritual progress. What did the Promised Messiah (as) compare this to?", options: ["A student studying hard", "A person taking opium that masks pain but doesn't cure the illness", "A bird learning to fly", "A farmer growing crops"], answer: 1 },
+            { category: "Dhikr", points: 200, question: "Why did the Promised Messiah (as) criticize certain Sufis of his time?", options: ["They relied on empty rituals instead of defending Islam", "They prayed too often", "They memorized too much Qur'an", "They discouraged charity"], answer: 0 },
+            { category: "Dhikr", points: 200, question: "Which of the following practices has no basis in Qur'an or Sunnah?", options: ["Saying SubhanAllah", "Lowering one's voice in worship", "Shouting 'Allah' loudly with dancing", "Doing Dhikr after Salat"], answer: 2 },
+            { category: "Dhikr", points: 200, question: "Why is mixing Dhikr with loud music or rhythmic swaying discouraged?", options: ["Music is forbidden in all cases", "It imitates idol-worshipping rituals rather than prophetic teachings", "It makes Dhikr too easy", "It makes people sleepy"], answer: 1 },
+            { category: "Dhikr", points: 200, question: "According to the Holy Prophet (saw), why should voices not be raised excessively during Dhikr?", options: ["Allah cannot hear loud voices", "Loudness is only for war", "Allah is near and hears softly spoken words", "Quiet Dhikr is a secret ritual"], answer: 2 },
+
+            { category: "Islamic Success", points: 200, question: "What is the MAIN difference between Islamic success and worldly success?", options: ["Islam only encourages spiritual goals", "Islam forbids material success", "Worldly success is superior to spiritual success", "Islamic success balances worldly excellence with closeness to Allah"], answer: 3 },
+            { category: "Islamic Success", points: 200, question: "According to Surah Luqman, what is the greatest wrongdoing (grievous wrong)?", options: ["Forgetting homework", "Shirk", "Speaking loudly", "Eating too much"], answer: 1 },
+            { category: "Islamic Success", points: 200, question: "Which example shows subtle shirk?", options: ["Praying on time", "Playing a game for fun", "Cheating to get good grades and caring more about ego than Allah", "Helping your parents"], answer: 2 },
+            { category: "Islamic Success", points: 200, question: "Why does respecting parents bring success?", options: ["It makes people afraid of you", "It builds discipline and earns their prayers", "It convinces teachers to give better grades", "It brings more worldly power"], answer: 1 },
+            { category: "Islamic Success", points: 200, question: "What does 'Turn not thy cheek away from people in pride' warn against?", options: ["Smiling too much", "Being too friendly", "Looking down on others", "Talking quietly"], answer: 2 },
+            { category: "Islamic Success", points: 200, question: "According to Hazrat Luqman (as)'s advice, what does 'Allah will bring out even a mustard seed of action' teach?", options: ["Nothing is hidden from Allah, big or small", "Small actions don't matter", "You can hide sins with good excuses", "Only major sins are recorded"], answer: 0 },
+            { category: "Islamic Success", points: 200, question: "What does 'Be moderate in thy pace and lower thy voice' teach a believer?", options: ["Walk slowly everywhere", "Speak so quietly no one hears you", "Never speak up in public", "Avoid extremes and behave with dignity"], answer: 3 },
+
+            { category: "Tests & Patience", points: 200, question: "According to the Holy Qur'an (2:215), why are believers tested?", options: ["To punish them", "To reveal their true faith and strengthen them", "To make life unfair", "Because prophets didn't pray enough"], answer: 1 },
+            { category: "Tests & Patience", points: 200, question: "What does the hadith 'Victory comes with patience' teach us?", options: ["Patience is optional", "Hardship always lasts", "Success requires staying firm through difficulty", "Victory only comes through wealth"], answer: 2 },
+            { category: "Tests & Patience", points: 200, question: "Which example shows real patience?", options: ["Staying silent but resentful", "Giving up when tests feel hard", "Complaining to friends constantly", "Remaining calm, continuing good deeds, and trusting Allah"], answer: 3 },
+            { category: "Tests & Patience", points: 200, question: "Why did the Promised Messiah (as) compare trials to a doctor's bitter medicine?", options: ["Medicine is sweet", "It punishes the patient", "It is meant to heal and purify", "It replaces prayer"], answer: 2 },
+
+            { category: "Application", points: 200, question: "A student memorizes the Holy Qur'an but behaves arrogantly toward classmates. Which lesson from Surah Luqman applies?", options: ["Seek more wealth", "Allah dislikes arrogance and pride", "Speak louder to show confidence", "Follow what others do"], answer: 1 },
+            { category: "Application", points: 200, question: "A teenager prays regularly but watches harmful content online when alone. Which type of Dhikr is missing?", options: ["Verbal Dhikr", "Reflective Dhikr", "Living Dhikr (with actions)", "Loud Dhikr"], answer: 2 },
+            { category: "Application", points: 200, question: "Someone attends a 'Dhikr gathering' that uses dancing, drums, and shouting. What should they remember?", options: ["Such practices are innovations not found in Islam", "Emotional highs equal spirituality", "Loud Dhikr brings more reward", "Dhikr must always include music"], answer: 0 },
+            { category: "Application", points: 200, question: "A person keeps getting distracted in prayer. What is a Qur'anic solution?", options: ["Stop praying", "Avoid all responsibilities", "Raise your voice in prayer", "Remember Allah morning and evening and simplify daily distractions"], answer: 3 },
+            { category: "Application", points: 200, question: "A student avoids confronting wrong behavior because 'everyone does it.' Which teaching of Ibrahim (as) refutes this?", options: ["Stay quiet to avoid conflict", "Follow ancestors", "Stand for truth even when alone", "Only elders can challenge society"], answer: 2 },
+            { category: "Application", points: 200, question: "A friend boasts about his wealth and mocks others for having less. Which Qur'anic teaching applies?", options: ["Lower thy voice and be moderate", "Associate not partners with Allah", "Turn not thy cheek away from people in pride", "Encourage patience"], answer: 2 }
+        ];
+
+        let gameState = {
+            mode: null, // 'practice' or 'team'
+            teams: [],
+            answeredQuestions: new Set(),
+            currentTeam: null
+        };
+
+        let selectedTeamCount = 1;
+        let currentQuestion = null;
+
+        function selectMode(mode) {
+            gameState.mode = mode;
+            
+            if (mode === 'practice') {
+                // Start practice mode directly
+                gameState.teams = [{ name: 'Practice', score: 0 }];
+                document.getElementById('modeScreen').style.display = 'none';
+                document.getElementById('gameScreen').style.display = 'block';
+                initBoard();
+                updateScoreBoard();
+            } else {
+                // Go to team setup
+                document.getElementById('modeScreen').style.display = 'none';
+                document.getElementById('setupScreen').style.display = 'block';
+            }
+        }
+
+        function backToMode() {
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('modeScreen').style.display = 'block';
+        }
+
+        function selectTeamCount(count) {
+            selectedTeamCount = count;
+            
+            // Update button states
+            document.querySelectorAll('.team-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update team name inputs
+            const teamNamesContainer = document.getElementById('teamNames');
+            teamNamesContainer.innerHTML = '';
+            
+            for (let i = 1; i <= count; i++) {
+                const inputGroup = document.createElement('div');
+                inputGroup.className = 'team-input-group';
+                inputGroup.innerHTML = `
+                    <label>Team ${i} Name:</label>
+                    <input type="text" id="team${i}Name" placeholder="Enter team name" value="Team ${i}">
+                `;
+                teamNamesContainer.appendChild(inputGroup);
+            }
+        }
+
+        function startGame() {
+            gameState.teams = [];
+            
+            for (let i = 1; i <= selectedTeamCount; i++) {
+                const nameInput = document.getElementById(`team${i}Name`);
+                gameState.teams.push({
+                    name: nameInput.value || `Team ${i}`,
+                    score: 0
+                });
+            }
+            
+            // Show game screen
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'block';
+            
+            initBoard();
+            updateScoreBoard();
+        }
+
+        function updateScoreBoard() {
+            const scoreBoard = document.getElementById('scoreBoard');
+            scoreBoard.innerHTML = '';
+            
+            gameState.teams.forEach((team, index) => {
+                const teamScore = document.createElement('div');
+                teamScore.className = 'team-score';
+                if (gameState.currentTeam === index) {
+                    teamScore.classList.add('active');
+                }
+                teamScore.innerHTML = `
+                    <div class="team-name">${team.name}</div>
+                    <div class="team-points">${team.score}</div>
+                `;
+                scoreBoard.appendChild(teamScore);
+            });
+            
+            // Add questions answered counter
+            const questionsCounter = document.createElement('div');
+            questionsCounter.className = 'team-score';
+            questionsCounter.innerHTML = `
+                <div class="team-name">Questions</div>
+                <div class="team-points">${gameState.answeredQuestions.size}/60</div>
+            `;
+            scoreBoard.appendChild(questionsCounter);
+        }
+
+        function initBoard() {
+            const board = document.getElementById('board');
+            board.innerHTML = '';
+            
+            const categories = [...new Set(questions.map(q => q.category))];
+            
+            // Add category headers
+            categories.forEach(cat => {
+                const categoryEl = document.createElement('div');
+                categoryEl.className = 'category';
+                categoryEl.textContent = cat;
+                board.appendChild(categoryEl);
+            });
+
+            // Group questions by category
+            const questionsByCategory = {};
+            categories.forEach(cat => {
+                questionsByCategory[cat] = questions.filter(q => q.category === cat);
+            });
+
+            // Find max questions in any category
+            const maxQuestions = Math.max(...Object.values(questionsByCategory).map(arr => arr.length));
+
+            // Add question cards
+            for (let i = 0; i < maxQuestions; i++) {
+                categories.forEach(cat => {
+                    if (questionsByCategory[cat][i]) {
+                        const q = questionsByCategory[cat][i];
+                        const qIndex = questions.indexOf(q);
+                        const card = document.createElement('div');
+                        card.className = 'question-card';
+                        if (gameState.answeredQuestions.has(qIndex)) {
+                            card.classList.add('answered');
+                        }
+                        card.textContent = q.points;
+                        card.dataset.index = qIndex;
+                        card.onclick = () => openQuestion(qIndex);
+                        board.appendChild(card);
+                    } else {
+                        // Empty cell
+                        const emptyCell = document.createElement('div');
+                        board.appendChild(emptyCell);
+                    }
+                });
+            }
+        }
+
+        function openQuestion(index) {
+            if (gameState.answeredQuestions.has(index)) return;
+            
+            currentQuestion = index;
+            
+            // If practice mode or single team, auto-select
+            if (gameState.mode === 'practice' || gameState.teams.length === 1) {
+                gameState.currentTeam = 0;
+                showQuestion();
+            } else {
+                // Multiple teams - show team selector
+                showTeamSelector();
+            }
+        }
+
+        function showTeamSelector() {
+            const modal = document.getElementById('teamSelectorModal');
+            const btnsContainer = document.getElementById('teamSelectionBtns');
+            btnsContainer.innerHTML = '';
+            
+            gameState.teams.forEach((team, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'team-select-btn';
+                btn.textContent = team.name;
+                btn.onclick = () => {
+                    gameState.currentTeam = index;
+                    modal.style.display = 'none';
+                    showQuestion();
+                };
+                btnsContainer.appendChild(btn);
+            });
+            
+            modal.style.display = 'flex';
+        }
+
+        function showQuestion() {
+            const q = questions[currentQuestion];
+            
+            document.getElementById('questionText').textContent = q.question;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            q.options.forEach((option, i) => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'option';
+                optionEl.textContent = String.fromCharCode(65 + i) + '. ' + option;
+                optionEl.onclick = () => checkAnswer(i);
+                optionsContainer.appendChild(optionEl);
+            });
+            
+            document.getElementById('result').classList.remove('show');
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function checkAnswer(selected) {
+            const q = questions[currentQuestion];
+            const optionsContainer = document.getElementById('options');
+            const options = optionsContainer.querySelectorAll('.option');
+            const result = document.getElementById('result');
+            
+            // Disable all options
+            options.forEach((opt, i) => {
+                opt.style.pointerEvents = 'none';
+                if (i === q.answer) {
+                    opt.classList.add('correct');
+                } else if (i === selected && selected !== q.answer) {
+                    opt.classList.add('incorrect');
+                }
+            });
+            
+            // Show result
+            if (selected === q.answer) {
+                const teamName = gameState.mode === 'practice' ? 'You' : gameState.teams[gameState.currentTeam].name;
+                result.textContent = `Correct! ${teamName} get${gameState.mode === 'practice' ? '' : 's'} +${q.points} points`;
+                result.className = 'result correct-result show';
+                gameState.teams[gameState.currentTeam].score += q.points;
+            } else {
+                result.textContent = `Incorrect. The correct answer was: ${String.fromCharCode(65 + q.answer)}. ${q.options[q.answer]}`;
+                result.className = 'result incorrect-result show';
+            }
+            
+            gameState.answeredQuestions.add(currentQuestion);
+            
+            // Mark card as answered
+            const card = document.querySelector(`[data-index="${currentQuestion}"]`);
+            if (card) {
+                card.classList.add('answered');
+            }
+            
+            updateScoreBoard();
+            saveProgress();
+        }
+
+        function saveProgress() {
+            // Save progress to localStorage for session persistence
+            const progress = {
+                mode: gameState.mode,
+                teams: gameState.teams,
+                answeredQuestions: Array.from(gameState.answeredQuestions)
+            };
+            localStorage.setItem('atfal_jeopardy_progress', JSON.stringify(progress));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('atfal_jeopardy_progress');
+            if (saved) {
+                const progress = JSON.parse(saved);
+                return progress;
+            }
+            return null;
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            gameState.currentTeam = null;
+        }
+
+        function showResetConfirm() {
+            if (confirm('Are you sure you want to reset the game? All progress will be lost.')) {
+                resetGame();
+            }
+        }
+
+        function resetGame() {
+            // Clear saved progress
+            localStorage.removeItem('atfal_jeopardy_progress');
+            
+            // Reset game state
+            gameState = {
+                mode: null,
+                teams: [],
+                answeredQuestions: new Set(),
+                currentTeam: null
+            };
+            
+            currentQuestion = null;
+            
+            // Show mode screen
+            document.getElementById('gameScreen').style.display = 'none';
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('modeScreen').style.display = 'block';
+            
+            closeModal();
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            const teamModal = document.getElementById('teamSelectorModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+            if (event.target === teamModal) {
+                teamModal.style.display = 'none';
+            }
+        }
+
+        // On page load, check for saved progress
+        window.onload = function() {
+            const progress = loadProgress();
+            if (progress && confirm('Continue your previous game?')) {
+                gameState.mode = progress.mode;
+                gameState.teams = progress.teams;
+                gameState.answeredQuestions = new Set(progress.answeredQuestions);
+                
+                document.getElementById('modeScreen').style.display = 'none';
+                document.getElementById('gameScreen').style.display = 'block';
+                
+                initBoard();
+                updateScoreBoard();
+            }
+        }
+    </script>
+</body>
+</html>
